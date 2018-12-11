@@ -1,0 +1,45 @@
+{% extends 'blog/base.html' %} {% block content %}
+
+<section id="main" class="wrapper">
+    <div class="inner">
+        <!-- Elements -->
+        
+        <div class="row 200% form-login">
+            <div class="12u">
+
+                <br>
+                <form id="formulario-perris" method="POST" data-cities-url="{% url 'blog:load_ciudades' %}" class="post-form">
+                        <br>
+                        <h1>¡Inscribe una tienda!</h1>
+                        <br> {% csrf_token %} {{ tienda.as_p }}
+                        <br>
+                        <input type="submit" name="submit" value="Enviar">
+                        <a href="{% url 'blog:home' %}"><input type="button" name="back" value="Volver"></a>
+                
+                    </form>
+                
+                    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+                    <script>
+                        $("#id_region").change(function () {
+                            var url = $("#formulario-perris").attr("data-cities-url");  // get the url of the `load_cities` view
+                            var regionId = $(this).val();  // get the selected country ID from the HTML input
+                
+                            $.ajax({                       // initialize an AJAX request
+                                url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
+                                data: {
+                                    'region': regionId       // add the country id to the GET parameters
+                                },
+                                success: function (data) {   // `data` is the return of the `load_cities` view function
+                                    $("#id_ciudad").html(data);  // replace the contents of the city input with the data that came from the server
+                                }
+                            });
+                
+                        });
+                    </script>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

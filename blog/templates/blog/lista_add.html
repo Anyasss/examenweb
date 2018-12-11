@@ -1,0 +1,88 @@
+{% extends 'blog/base.html' %} {%load static%} {% block content %}
+
+
+<section id="main" class="wrapper">
+        <div class="inner">
+                {% if object %}
+                <form role="form" action="{% url 'blog:modificar_compra' object.pk %}" method="post">
+                        <h3>Modificar Compra</h3>
+                {% else %}
+                <form role="form" action="{% url 'blog:crear_compra' %}" method="post">
+                        <h3>Crear Compra</h3>
+                {% endif %}
+                        {% csrf_token %}
+                        <div class="panel panel-default">
+                                <div class="panel-body">
+                                        {{ form.as_p }} 
+                                       
+                                        {{ detalle_compra_form_set.management_form }}
+                                        <hr> {% for detalle_compra_form in detalle_compra_form_set %}
+                                        <div class="row">
+                                                <div class="col-lg-8"> 
+                                                        <label>Producto</label>
+                                                        {{ detalle_compra_form.nombre }}
+                                                </div>
+                                                <div class="col-lg-4">
+
+                                                        <label>costo Presupuestado</label>
+
+                                                        {{ detalle_compra_form.costoPresupuestado }}
+                                                </div>
+                                                <div class="col-lg-4">
+                                                                <br>
+                                                                
+                                                        <label>Costo Real</label>
+
+                                                        {{ detalle_compra_form.costoReal }}
+                                                </div>
+                                               
+                                                <div class="col-lg-4">
+                                                                <br>
+                                                        <label>Notas Adicionales</label>
+
+                                                        {{ detalle_compra_form.notasAdicionales }}
+                                                </div>
+                                                <div class="col-lg-4">
+                                                                <br>
+                                                                <label>Tienda</label>
+                                                                {{ detalle_compra_form.tienda }}
+
+                                                                
+                                                </div>
+                                    
+                                                <div class="col-lg-4">
+                                                                <br>
+                                                        
+                                                        <label>Estado</label>
+                                                        {{ detalle_compra_form.estado }}
+                                                        
+                                                </div>
+
+                                        </div>
+                                        <hr> {% endfor %}
+
+                                </div>
+                        </div>
+
+                        <div class="col-lg-12 text-right">
+                                
+                                
+                                <input type="submit" class="button scrolly" name="submit" value="Guardar">
+                                <a type="button" class="button special" href="{% url 'blog:compras_list' %}">
+                                        Cancelar
+                                </a>
+                                <br>
+                               
+                        </div>
+                        <br>
+                </form>
+
+
+        </div>
+</section>
+
+
+
+
+
+{% endblock %}

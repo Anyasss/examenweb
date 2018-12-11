@@ -1,0 +1,130 @@
+{% load static %}
+<html>
+{% load pwa %}
+
+<head>
+    {% progressive_web_app_meta %}
+    <title>Neo Compra</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="msapplication-TileImage" content="static/icons/i1.png">
+    <meta name="msapplication-TileColor" content="#2F3BA2">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/jquery.scrolly.min.js' %}"></script>
+    <script src="{% static 'js/skel.min.js' %}"></script>
+    <script src="{% static 'js/util.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <link rel="manifest" href="/manifest.json" />
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+    <script>
+        var OneSignal = window.OneSignal || [];
+        OneSignal.push(function () {
+            OneSignal.init({
+                appId: "877d417d-3142-49d6-9823-87ac29a97486",
+                autoRegister: false,
+                notifyButton: {
+                    enable: true,
+                },
+                allowLocalhostAsSecureOrigin: true,
+            });
+        });
+
+        OneSignal.getUserId(function (userId) {
+            console.log('player_id of the subscribed user is : ' + userId);
+            // Make sure to change the URL for the correct path
+            $.post("/onesignal-register/",
+                {
+                    playerId: userId,
+                    csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                function (data, status) {
+                    console.log("Data: " + data + "\nStatus: " + status);
+                });
+        });
+    </script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header id="header">
+        <nav class="left">
+            <a href="#menu"><span>Menu</span></a>
+        </nav>
+        <a href="{% url 'blog:home' %}" class="logo">Neo Compra</a>
+        {% if user.is_authenticated %}
+        <nav class="right">
+
+            <form class="logout-link" action="{% url 'accounts:logout' %}" method="post">
+                Hola: {{ request.user }} {% csrf_token %}
+                <button class="salir" type="submit">LogOut</button>
+            </form>
+        </nav>
+
+        {% else %}
+
+        <nav class="right sesion">
+
+            <a href="{% url 'accounts:login' %}" class="button alt">LogIn</a>
+        </nav>
+
+        {% endif %}
+
+        <!--<nav class="right2">
+					<a href="login.html" class="button session">Cerrar Sesión</a>
+				</nav>-->
+    </header>
+
+    <!-- Menu -->
+    <nav id="menu">
+        <ul class="links">
+            <li><a href="{% url 'blog:home' %}">Inicio</a></li>
+            <li><a href="generic.html">Quiénes Somos</a></li>
+            <li><a href="#footer">Contacto</a></li>
+        </ul>
+        {% if user.is_authenticated %}
+        <ul class="actions vertical">
+            <li>
+                <form class="logout-link" action="{% url 'accounts:logout' %}" method="post">
+                    Hola : {{ request.user }} {% csrf_token %}
+                    <br>
+                    <br>
+                    <button class="salir" type="submit">LogOut</button>
+                </form>
+
+            </li>
+        </ul>
+        {% else %}
+        <ul class="actions vertical">
+
+            <li><a href="{% url 'accounts:login' %}" class="button fit">Login</a></li>
+        </ul>
+        {% endif %}
+    </nav>
+
+    {% block content %} {% endblock %}
+
+
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="inner">
+            <h2>Contacto</h2>
+            <ul class="actions">
+                <li><span class="icon fa-phone"></span> <a href="#">(+56) 959078635</a></li>
+                <li><span class="icon fa-envelope"></span> <a href="#">info@neocompra.cl</a></li>
+                <li><span class="icon fa-map-marker"></span> Camino uno 98, Valparaíso, Región Valparaíso</li>
+            </ul>
+        </div>
+        <div class="copyright">
+            &copy; Untitled. Design <a href="https://templated.co">TEMPLATED</a>. Images <a href="https://unsplash.com">Unsplash</a>.
+        </div>
+    </footer>
+
+</body>
+
+
+</html>

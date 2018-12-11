@@ -1,0 +1,23 @@
+{% extends 'blog/base.html' %} {% block content %} {% csrf_token %}
+
+<section id="main" class="wrapper">
+    <div class="inner">
+        <!-- Elements -->
+        <h2 id="elements">Ingresa un Producto</h2>
+        <div class="row 200% form-login">
+            <div class="12u">
+
+                <form method="POST" class="post-form">
+                    {% csrf_token %} {{ producto.as_p }}
+                    
+                    <br>
+                    <input type="submit" name="submit" value="Registrar">
+                    <input type="button" name="back" value="Volver" onclick="location.href='/'">
+                </form>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
